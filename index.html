@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LX STUDIO BR - Design & Desenvolvimento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <img src="logo.png" alt="LX STUDIO BR Logo" class="logo">
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#portfolio">Portfólio</a>
+            <a href="#depoimentos">Depoimentos</a>
+            <a href="#contato" class="btn-destaque">Fale Conosco</a>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <h1>Design e Soluções Digitais Modernas</h1>
+        <p>Transformamos suas ideias em logotipos, sites e soluções tech. Este é o seu ponto de encontro com a inovação.</p>
+        <a href="LINK_DO_SEU_DISCORD" class="btn-principal" target="_blank">
+            Entre na nossa comunidade no Discord!
+        </a>
+    </section>
+
+    <section id="portfolio">
+        <h2>Nosso Trabalho</h2>
+        
+        <div class="filtros">
+            <button class="filtro-btn ativo" data-filtro="todos">Todos</button>
+            <button class="filtro-btn" data-filtro="logotipos">Logotipos</button>
+            <button class="filtro-btn" data-filtro="thumbnails">Thumbnails</button>
+            <button class="filtro-btn" data-filtro="cardapios">Cardápios</button>
+            <button class="filtro-btn" data-filtro="web">Web Dev</button>
+            </div>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-card" data-categoria="logotipos">
+                </div>
+        </div>
+    </section>
+
+    <section id="solucoes">
+        <h2>Mais que Design: Soluções em Código</h2>
+        <p>
+            Além do design, também nos especializamos em desenvolvimento. 
+            Aqui você pode ver cases de problemas resolvidos com:
+            <strong>Python, Ruby, React, C++</strong> e mais.
+        </p>
+        </section>
+
+    <section id="depoimentos">
+        <h2>O que dizem nossos clientes</h2>
+        <div class="depoimento-card">
+            <p>"A LX STUDIO BR entregou meu logo em tempo recorde. 10/10!"</p>
+            <span>- Cliente Satisfeito</span>
+            <div class="estrelas" data-rating="5">★★★★★</div>
+        </div>
+        </section>
+
+    <footer id="contato">
+        <h3>Pronto para começar seu projeto?</h3>
+        <p>Clique abaixo e vamos conversar diretamente no Discord.</p>
+        <a href="LINK_DO_SEU_DISCORD" class="btn-principal" target="_blank">
+            Entrar no LX STUDIO BR (Discord)
+        </a>
+        <p class="copyright">© 2025 LX STUDIO BR. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

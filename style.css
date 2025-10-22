@@ -1,0 +1,68 @@
+/* ... (import de fontes, variáveis de cor) ... */
+
+.portfolio-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; /* Para a imagem se ajustar */
+    transition: all 0.3s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.portfolio-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-info {
+    padding: 20px;
+}
+
+.card-categoria {
+    background-color: var(--cor-verde-destaque); /* Verde do logo */
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.card-info h3 {
+    color: var(--cor-azul-principal); /* Azul do logo */
+    margin: 10px 0;
+}
+
+.card-features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.estrelas {
+    color: #FFD700; /* Cor de estrela */
+}
+.estrelas span { /* Estrela vazia */
+    color: #CCC;
+}
+
+.like-btn {
+    background: #eee;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-btn .like-count {
+    font-weight: bold;
+}
