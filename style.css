@@ -147,9 +147,20 @@
        padding: 100px 5%;
    }
    
-   .hero h1 {
-       font-size: 3rem;
-   }
+   .hero h1 {F
+    /* font-size: 3rem; FOI REMOVIDO */
+    
+    /* ESTILO "ARTÍSTICO" COM GRADIENTE */
+    font-size: 3.2rem; /* Um pouco maior */
+    font-weight: 700;
+    /* O gradiente do seu logo aplicado ao texto */
+    background: linear-gradient(90deg, var(--cor-azul-principal) 30%, var(--cor-verde-destaque) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    margin-bottom: 25px; /* Mais espaço */
+}
    
    .hero p {
        font-size: 1.2rem;
