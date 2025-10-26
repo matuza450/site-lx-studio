@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { // APENAS UM DOMContentLoaded!
+
     // --- Contador de Likes (Funcionalidade) ---
     const likeButtons = document.querySelectorAll('.like-btn');
 
@@ -42,86 +43,104 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Filtro de Projetos (Melhorado) ---
-    const filterButtons = document.querySelectorAll('.filtros button');
+
+    // --- Seletores Principais (Buscamos uma vez) ---
+    const body = document.body;
+    const filterContainer = document.querySelector('.filtros');
+    const portfolioGrid = document.querySelector('.portfolio-grid');
     const portfolioCards = document.querySelectorAll('.portfolio-card');
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove a classe 'active' de todos os botões e adiciona ao clicado
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+    // --- Filtro de Projetos (Profissional com Event Delegation) ---
 
-            const filter = button.dataset.filtro;
+    // 1. Define o botão 'Todos' como ativo inicialmente
+    let activeButton = filterContainer.querySelector('button[data-filtro="todos"]');
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
 
-            portfolioCards.forEach(card => {
-                if (filter === 'todos' || card.dataset.categoria === filter) {
-                    card.style.display = 'block'; // Mostra o card
-                } else {
-                    card.style.display = 'none'; // Esconde o card
-                }
-            });
+    // 2. Adiciona UM listener no container pai (Event Delegation)
+    filterContainer.addEventListener('click', (e) => {
+        // Encontra o botão que foi clicado
+        const clickedButton = e.target.closest('button');
+
+        // Se não clicou em um botão ou clicou no que já está ativo, para
+        if (!clickedButton || clickedButton === activeButton) {
+            return;
+        }
+
+        // 3. Gerencia o estado 'active'
+        if (activeButton) {
+            activeButton.classList.remove('active');
+        }
+        clickedButton.classList.add('active');
+        activeButton = clickedButton; // Atualiza o botão ativo
+
+        const filter = clickedButton.dataset.filtro;
+
+        // 4. Filtra os cards usando classes CSS
+        portfolioCards.forEach(card => {
+            const isVisible = (filter === 'todos' || card.dataset.categoria === filter);
+            // 'toggle' é mais limpo que 'add'/'remove' com 'if/else'
+            card.classList.toggle('hidden', !isVisible);
         });
     });
 
-    // --- Zoom na Imagem do Projeto (Modal) ---
-    const body = document.body; // Para impedir scroll quando o modal estiver ativo
-    const portfolioGrid = document.querySelector('.portfolio-grid');
+    // --- Modal de Zoom (Performático: Criado uma única vez) ---
 
-    // Cria o overlay do modal uma única vez
+    // 1. Cria a estrutura completa do modal no carregamento da página
     const modalOverlay = document.createElement('div');
-    modalOverlay.classList.add('modal-overlay');
+    modalOverlay.className = 'modal-overlay';
+
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+
+    const modalImage = document.createElement('img');
+
+    const modalClose = document.createElement('button');
+    modalClose.className = 'modal-close';
+    modalClose.textContent = '✕'; // '✕' é um 'X' de fechar melhor que 'x'
+
+    // Monta a estrutura
+    modalContent.append(modalImage, modalClose);
+    modalOverlay.appendChild(modalContent);
     body.appendChild(modalOverlay);
 
-    modalOverlay.addEventListener('click', (e) => {
-        // Fecha o modal se clicar fora da imagem
-        if (e.target === modalOverlay) {
-            modalOverlay.classList.remove('active');
-            body.style.overflow = ''; // Habilita o scroll novamente
-        }
-    });
+    // 2. Funções limpas para abrir e fechar o modal
+    const openModal = (imgSrc, imgAlt) => {
+        modalImage.src = imgSrc; // Apenas atualiza o 'src' da imagem
+        modalImage.alt = imgAlt;
+        modalOverlay.classList.add('active');
+        body.style.overflow = 'hidden'; // Impede scroll
+    };
 
+    const closeModal = () => {
+        modalOverlay.classList.remove('active');
+        body.style.overflow = ''; // Libera scroll
+    };
+
+    // 3. Listeners para abrir e fechar
     portfolioGrid.addEventListener('click', (e) => {
+        // Delegação de evento para as imagens dentro da grid
         const clickedImg = e.target.closest('.portfolio-card img');
         if (clickedImg) {
-            // Cria o conteúdo do modal (imagem e botão de fechar)
-            const modalContent = document.createElement('div');
-            modalContent.classList.add('modal-content');
-
-            const fullImg = document.createElement('img');
-            fullImg.src = clickedImg.src; // Usa a mesma URL da imagem original
-            fullImg.alt = clickedImg.alt;
-
-            const closeButton = document.createElement('button');
-            closeButton.classList.add('modal-close');
-            closeButton.textContent = '✕';
-            closeButton.addEventListener('click', () => {
-                modalOverlay.classList.remove('active');
-                body.style.overflow = '';
-            });
-
-            // Limpa o conteúdo anterior e adiciona o novo
-            modalOverlay.innerHTML = ''; 
-            modalContent.appendChild(fullImg);
-            modalContent.appendChild(closeButton);
-            modalOverlay.appendChild(modalContent);
-
-            modalOverlay.classList.add('active');
-            body.style.overflow = 'hidden'; // Impede o scroll da página
+            openModal(clickedImg.src, clickedImg.alt);
         }
     });
 
-    // Fechar modal com tecla ESC
+    modalOverlay.addEventListener('click', (e) => {
+        // Fecha apenas se clicar no fundo (overlay), não no conteúdo
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+
+    modalClose.addEventListener('click', closeModal);
+
     document.addEventListener('keydown', (e) => {
+        // Fecha com a tecla 'Escape'
         if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-            modalOverlay.classList.remove('active');
-            body.style.overflow = '';
+            closeModal();
         }
     });
 
-    // Adiciona classe 'active' ao botão 'Todos' por padrão
-    const allButton = document.querySelector('.filtros button[data-filtro="todos"]');
-    if (allButton) {
-        allButton.classList.add('active');
-    }
-});
+}); // <-- Este é o único fechamento do DOMContentLoaded necessário

@@ -195,6 +195,18 @@
        color: var(--cor-branco);
        border-color: var(--cor-azul-principal);
    }
+
+/* Adicione isso à sua seção de responsividade ou portfólio */
+.portfolio-card.hidden {
+    display: none;
+    
+    /* Opcional: Se quiser uma animação de fade-out em vez de sumir
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    */
+}
    
    /* Grid onde ficam os cards */
    .portfolio-grid {
