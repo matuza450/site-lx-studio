@@ -85,62 +85,98 @@ document.addEventListener('DOMContentLoaded', () => { // APENAS UM DOMContentLoa
         });
     });
 
-    // --- Modal de Zoom (Performático: Criado uma única vez) ---
+  // ... (Seu código de Likes e Filtros fica aqui em cima) ...
 
-    // 1. Cria a estrutura completa do modal no carregamento da página
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'modal-overlay';
 
-    const modalContent = document.createElement('div');
-    modalContent.className = 'modal-content';
+// --- Modal de DETALHES DO PROJETO (Substituição do Modal de Zoom) ---
 
-    const modalImage = document.createElement('img');
+// 1. Cria a estrutura completa do modal no carregamento da página
+const body = document.body; // Você já deve ter isso em cima
+const modalOverlay = document.createElement('div');
+modalOverlay.className = 'modal-overlay';
 
-    const modalClose = document.createElement('button');
-    modalClose.className = 'modal-close';
-    modalClose.textContent = '✕'; // '✕' é um 'X' de fechar melhor que 'x'
+const modalContent = document.createElement('div');
+modalContent.className = 'modal-content';
 
-    // Monta a estrutura
-    modalContent.append(modalImage, modalClose);
-    modalOverlay.appendChild(modalContent);
-    body.appendChild(modalOverlay);
+const modalClose = document.createElement('button');
+modalClose.className = 'modal-close';
+modalClose.textContent = '✕';
 
-    // 2. Funções limpas para abrir e fechar o modal
-    const openModal = (imgSrc, imgAlt) => {
-        modalImage.src = imgSrc; // Apenas atualiza o 'src' da imagem
-        modalImage.alt = imgAlt;
-        modalOverlay.classList.add('active');
-        body.style.overflow = 'hidden'; // Impede scroll
-    };
+// Cria o layout (Imagem | Texto)
+const modalLayout = document.createElement('div');
+modalLayout.className = 'modal-layout';
 
-    const closeModal = () => {
-        modalOverlay.classList.remove('active');
-        body.style.overflow = ''; // Libera scroll
-    };
+// Coluna da Imagem
+const modalImageCol = document.createElement('div');
+modalImageCol.className = 'modal-image-col';
+const modalImage = document.createElement('img');
+modalImageCol.appendChild(modalImage);
 
-    // 3. Listeners para abrir e fechar
-    portfolioGrid.addEventListener('click', (e) => {
-        // Delegação de evento para as imagens dentro da grid
-        const clickedImg = e.target.closest('.portfolio-card img');
-        if (clickedImg) {
-            openModal(clickedImg.src, clickedImg.alt);
-        }
-    });
+// Coluna do Texto
+const modalTextCol = document.createElement('div');
+modalTextCol.className = 'modal-text-col';
+const modalTitle = document.createElement('h3');
+const modalDescription = document.createElement('p');
+modalTextCol.append(modalTitle, modalDescription);
 
-    modalOverlay.addEventListener('click', (e) => {
-        // Fecha apenas se clicar no fundo (overlay), não no conteúdo
-        if (e.target === modalOverlay) {
-            closeModal();
-        }
-    });
+// Monta a estrutura
+modalLayout.append(modalImageCol, modalTextCol);
+modalContent.append(modalClose, modalLayout); // Botão de fechar e o layout
+modalOverlay.appendChild(modalContent);
+body.appendChild(modalOverlay);
 
-    modalClose.addEventListener('click', closeModal);
+// 2. Funções limpas para abrir e fechar o modal
+const openModal = (imgSrc, imgAlt, title, description) => {
+    // Preenche os dados no modal
+    modalImage.src = imgSrc;
+    modalImage.alt = imgAlt;
+    modalTitle.textContent = title;
+    modalDescription.textContent = description;
+    
+    // Ativa o modal
+    modalOverlay.classList.add('active');
+    body.style.overflow = 'hidden'; // Impede scroll
+};
 
-    document.addEventListener('keydown', (e) => {
-        // Fecha com a tecla 'Escape'
-        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-            closeModal();
-        }
-    });
+const closeModal = () => {
+    modalOverlay.classList.remove('active');
+    body.style.overflow = ''; // Libera scroll
+};
 
-}); // <-- Este é o único fechamento do DOMContentLoaded necessário
+// 3. Listeners para abrir e fechar
+portfolioGrid.addEventListener('click', (e) => {
+    // AGORA escutamos o clique no botão "Ver detalhes"
+    const clickedBtn = e.target.closest('.ver-detalhes-btn');
+    
+    if (clickedBtn) {
+        // Encontra o card pai para pegar todas as informações
+        const card = clickedBtn.closest('.portfolio-card');
+        
+        // Pega os dados do card
+        const imgSrc = card.querySelector('img').src;
+        const imgAlt = card.querySelector('img').alt;
+        const title = card.querySelector('h3').textContent;
+        const description = card.querySelector('p').textContent;
+        
+        // Abre o modal com todos os dados
+        openModal(imgSrc, imgAlt, title, description);
+    }
+});
+
+modalOverlay.addEventListener('click', (e) => {
+    // Fecha apenas se clicar no fundo (overlay), não no conteúdo
+    if (e.target === modalOverlay) {
+        closeModal();
+    }
+});
+
+modalClose.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', (e) => {
+    // Fecha com a tecla 'Escape'
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// ... (O resto do seu script.js, se houver, continua aqui) ...
