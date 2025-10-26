@@ -53,45 +53,48 @@ document.addEventListener('DOMContentLoaded', () => { // APENAS UM DOMContentLoa
     // --- Filtro de Projetos (Profissional com Event Delegation) ---
 
     // 1. Define o botão 'Todos' como ativo inicialmente
-    let activeButton = filterContainer.querySelector('button[data-filtro="todos"]');
+    let activeButton = filterContainer ? filterContainer.querySelector('button[data-filtro="todos"]') : null;
     if (activeButton) {
         activeButton.classList.add('active');
     }
 
     // 2. Adiciona UM listener no container pai (Event Delegation)
-    filterContainer.addEventListener('click', (e) => {
-        // Encontra o botão que foi clicado
-        const clickedButton = e.target.closest('button');
+    // Verificação de robustez: Só adiciona o listener se o container existir
+    if (filterContainer) {
+        filterContainer.addEventListener('click', (e) => {
+            // Encontra o botão que foi clicado
+            const clickedButton = e.target.closest('button');
 
-        // Se não clicou em um botão ou clicou no que já está ativo, para
-        if (!clickedButton || clickedButton === activeButton) {
-            return;
-        }
+            // Se não clicou em um botão ou clicou no que já está ativo, para
+            if (!clickedButton || clickedButton === activeButton) {
+                return;
+            }
 
-        // 3. Gerencia o estado 'active'
-        if (activeButton) {
-            activeButton.classList.remove('active');
-        }
-        clickedButton.classList.add('active');
-        activeButton = clickedButton; // Atualiza o botão ativo
+            // 3. Gerencia o estado 'active'
+            if (activeButton) {
+                activeButton.classList.remove('active');
+            }
+            clickedButton.classList.add('active');
+            activeButton = clickedButton; // Atualiza o botão ativo
 
-        const filter = clickedButton.dataset.filtro;
+            const filter = clickedButton.dataset.filtro;
 
-        // 4. Filtra os cards usando classes CSS
-        portfolioCards.forEach(card => {
-            const isVisible = (filter === 'todos' || card.dataset.categoria === filter);
-            // 'toggle' é mais limpo que 'add'/'remove' com 'if/else'
-            card.classList.toggle('hidden', !isVisible);
+            // 4. Filtra os cards usando classes CSS
+            portfolioCards.forEach(card => {
+                const isVisible = (filter === 'todos' || card.dataset.categoria === filter);
+                // 'toggle' é mais limpo que 'add'/'remove' com 'if/else'
+                card.classList.toggle('hidden', !isVisible);
+            });
         });
-    });
-
-  // ... (Seu código de Likes e Filtros fica aqui em cima) ...
+    }
 
 
 // --- Modal de DETALHES DO PROJETO (Substituição do Modal de Zoom) ---
 
 // 1. Cria a estrutura completa do modal no carregamento da página
-const body = document.body; // Você já deve ter isso em cima
+
+// const body = document.body; // <-- ERRO! ESTA LINHA FOI REMOVIDA (já declarada na linha 40)
+
 const modalOverlay = document.createElement('div');
 modalOverlay.className = 'modal-overlay';
 
@@ -144,24 +147,27 @@ const closeModal = () => {
 };
 
 // 3. Listeners para abrir e fechar
-portfolioGrid.addEventListener('click', (e) => {
-    // AGORA escutamos o clique no botão "Ver detalhes"
-    const clickedBtn = e.target.closest('.ver-detalhes-btn');
-    
-    if (clickedBtn) {
-        // Encontra o card pai para pegar todas as informações
-        const card = clickedBtn.closest('.portfolio-card');
+// Verificação de robustez: Só adiciona o listener se a grid existir
+if (portfolioGrid) {
+    portfolioGrid.addEventListener('click', (e) => {
+        // AGORA escutamos o clique no botão "Ver detalhes"
+        const clickedBtn = e.target.closest('.ver-detalhes-btn');
         
-        // Pega os dados do card
-        const imgSrc = card.querySelector('img').src;
-        const imgAlt = card.querySelector('img').alt;
-        const title = card.querySelector('h3').textContent;
-        const description = card.querySelector('p').textContent;
-        
-        // Abre o modal com todos os dados
-        openModal(imgSrc, imgAlt, title, description);
-    }
-});
+        if (clickedBtn) {
+            // Encontra o card pai para pegar todas as informações
+            const card = clickedBtn.closest('.portfolio-card');
+            
+            // Pega os dados do card
+            const imgSrc = card.querySelector('img').src;
+            const imgAlt = card.querySelector('img').alt;
+            const title = card.querySelector('h3').textContent;
+            const description = card.querySelector('p').textContent;
+            
+            // Abre o modal com todos os dados
+            openModal(imgSrc, imgAlt, title, description);
+        }
+    });
+}
 
 modalOverlay.addEventListener('click', (e) => {
     // Fecha apenas se clicar no fundo (overlay), não no conteúdo
@@ -179,4 +185,4 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// ... (O resto do seu script.js, se houver, continua aqui) ...
+}); // <-- Fechamento final do DOMContentLoaded
