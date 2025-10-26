@@ -695,3 +695,24 @@
         font-size: 1.5rem;
     }
 }
+
+/* --- Estilos para as Novas Tags do Card --- */
+
+.card-tags {
+    margin-top: 10px;
+    margin-bottom: 15px; /* Espaço antes do botão "Ver detalhes" */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 25px; /* Garante altura mínima mesmo se vazio */
+}
+
+.card-tag {
+    background-color: #eee;
+    color: #555;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 15px;
+    text-transform: uppercase;
+}
